@@ -1,14 +1,432 @@
 
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>موقعي الأول</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مغامرات البطل الصغير</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: #101536;
+  color: white;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 { color: #ffd43b; }
+
+.hud {
+  font-size: 20px;
+  margin: 10px;
+}
+
+canvas {
+  display: block;
+  width: min(96vw, 900px);
+  margin: auto;
+  border: 4px solid white;
+  border-radius: 12px;
+  background: #87ceeb;
+  touch-action: none;
+}
+
+button {
+  padding: 12px 18px;
+  margin: 7px;
+  border: 0;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  background: #ffd43b;
+  cursor: pointer;
+  touch-action: none;
+}
+
+.controls { direction: ltr; }
+</style>
 </head>
+
 <body>
-    <h1>أهلاً بيكم في موقعي!</h1>
-    <p>أنا بتعلم تصميم وبرمجة مواقع الويب.</p>
+
+<h1>⭐ مغامرات البطل الصغير ⭐</h1>
+
+<div class="hud">
+  🪙 العملات: <span id="coins">0</span>
+  |
+  ❤️ الأرواح: <span id="lives">3</span>
+</div>
+
+<canvas id="game" width="900" height="500"></canvas>
+
+<div class="controls">
+  <button id="left">⬅️</button>
+  <button id="jump">⬆️ نط</button>
+  <button id="right">➡️</button>
+</div>
+
+<button onclick="restart()">🔄 ابدأ من جديد</button>
+
+<p>الكمبيوتر: الأسهم للحركة و Space للنط</p>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+const W = canvas.width;
+const H = canvas.height;
+
+const heroImage = new Image();
+heroImage.src = "player.png";
+
+let player, platforms, coins, enemies;
+let score, lives, camera, gameOver, won;
+let left = false, right = false;
+let jumpRequest = false;
+let frame = 0;
+
+function restart() {
+  player = {
+    x: 60, y: 300,
+    w: 48, h: 58,
+    vx: 0, vy: 0,
+    onGround: false
+  };
+
+  platforms = [
+    {x:0, y:430, w:420, h:70},
+    {x:480, y:430, w:300, h:70},
+    {x:840, y:430, w:330, h:70},
+    {x:1230, y:430, w:350, h:70},
+    {x:1650, y:430, w:550, h:70},
+    {x:180, y:340, w:130, h:20},
+    {x:530, y:330, w:130, h:20},
+    {x:900, y:340, w:130, h:20},
+    {x:1120, y:300, w:130, h:20},
+    {x:1420, y:340, w:140, h:20},
+    {x:1740, y:330, w:130, h:20}
+  ];
+
+  coins = [
+    {x:220,y:300,taken:false},
+    {x:570,y:290,taken:false},
+    {x:710,y:380,taken:false},
+    {x:950,y:300,taken:false},
+    {x:1170,y:260,taken:false},
+    {x:1480,y:300,taken:false},
+    {x:1790,y:290,taken:false},
+    {x:2000,y:380,taken:false}
+  ];
+
+  enemies = [
+    {x:330,y:395,w:35,h:35,vx:1.5,min:280,max:390},
+    {x:990,y:395,w:35,h:35,vx:2,min:870,max:1120},
+    {x:1740,y:395,w:35,h:35,vx:1.7,min:1680,max:2100}
+  ];
+
+  score = 0;
+  lives = 3;
+  camera = 0;
+  gameOver = false;
+  won = false;
+  frame = 0;
+  left = false;
+  right = false;
+  jumpRequest = false;
+  updateHud();
+}
+
+function updateHud() {
+  document.getElementById("coins").textContent = score;
+  document.getElementById("lives").textContent = lives;
+}
+
+function drawBackground() {
+  const sky = ctx.createLinearGradient(0,0,0,H);
+  sky.addColorStop(0,"#55c9ff");
+  sky.addColorStop(1,"#d5f6ff");
+  ctx.fillStyle = sky;
+  ctx.fillRect(0,0,W,H);
+
+  // سحب
+  ctx.fillStyle = "rgba(255,255,255,0.9)";
+  for (let i=0; i<7; i++) {
+    let x = ((i*190 - camera*0.25) % 1100 + 1100) % 1100;
+    let y = 70 + (i%3)*45;
+    ctx.beginPath();
+    ctx.arc(x,y,23,0,Math.PI*2);
+    ctx.arc(x+25,y-12,30,0,Math.PI*2);
+    ctx.arc(x+55,y,22,0,Math.PI*2);
+    ctx.fill();
+  }
+
+  // تلال في الخلفية
+  ctx.fillStyle = "#75d66c";
+  for (let i=0;i<8;i++) {
+    const x = i*180 - (camera*0.45 % 180);
+    ctx.beginPath();
+    ctx.ellipse(x+80,445,100,65,0,Math.PI,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function drawPlatforms() {
+  for (const p of platforms) {
+    const x = p.x - camera;
+    if (x > W || x+p.w < 0) continue;
+
+    ctx.fillStyle = "#a65e2e";
+    ctx.fillRect(x,p.y,p.w,p.h);
+
+    ctx.fillStyle = "#40c84a";
+    ctx.fillRect(x,p.y,p.w,12);
+
+    ctx.fillStyle = "#d48a4a";
+    for(let bx=x+12; bx<x+p.w; bx+=35) {
+      ctx.fillRect(bx,p.y+25,20,5);
+    }
+  }
+}
+
+function drawCoins() {
+  for(const c of coins) {
+    if(c.taken) continue;
+
+    const x = c.x-camera;
+    if(x < -30 || x > W+30) continue;
+
+    ctx.fillStyle = "#ffb703";
+    ctx.beginPath();
+    ctx.arc(x,c.y,13,0,Math.PI*2);
+    ctx.fill();
+
+    ctx.strokeStyle = "#fff0a6";
+    ctx.lineWidth = 4;
+    ctx.stroke();
+
+    ctx.fillStyle = "#fff7c2";
+    ctx.fillRect(x-2,c.y-7,4,14);
+  }
+}
+
+function drawHero() {
+  const x = player.x-camera;
+
+  // ظل البطل
+  ctx.fillStyle = "rgba(0,0,0,0.15)";
+  ctx.beginPath();
+  ctx.ellipse(x+player.w/2,player.y+player.h+3,22,6,0,0,Math.PI*2);
+  ctx.fill();
+
+  if(heroImage.complete && heroImage.naturalWidth > 0) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.roundRect(x,player.y,player.w,player.h,12);
+    ctx.clip();
+    ctx.drawImage(heroImage,x,player.y,player.w,player.h);
+    ctx.restore();
+
+    ctx.strokeStyle = "#fff";
+    ctx.lineWidth = 3;
+    ctx.strokeRect(x,player.y,player.w,player.h);
+  } else {
+    ctx.fillStyle = "#ffccaa";
+    ctx.fillRect(x,player.y,player.w,player.h);
+    ctx.fillStyle = "#222";
+    ctx.fillText("🙂",x+5,player.y+35);
+  }
+}
+
+function drawEnemies() {
+  for(const e of enemies) {
+    const x = e.x-camera;
+    if(x < -50 || x > W+50) continue;
+
+    ctx.font = "34px Arial";
+    ctx.textAlign = "center";
+    ctx.fillText("👾",x+e.w/2,e.y+e.h);
+  }
+}
+
+function drawFinish() {
+  ctx.fillStyle = "#e63946";
+  ctx.fillRect(2110-camera,310,10,120);
+  ctx.fillStyle = "#ffca3a";
+  ctx.beginPath();
+  ctx.moveTo(2120-camera,310);
+  ctx.lineTo(2180-camera,330);
+  ctx.lineTo(2120-camera,350);
+  ctx.fill();
+}
+
+function hit(a,b) {
+  return a.x < b.x+b.w &&
+         a.x+a.w > b.x &&
+         a.y < b.y+b.h &&
+         a.y+a.h > b.y;
+}
+
+function update() {
+  if(gameOver || won) return;
+
+  frame++;
+
+  const oldY = player.y;
+
+  player.vx = 0;
+  if(left) player.vx = -4;
+  if(right) player.vx = 4;
+
+  player.x += player.vx;
+  player.x = Math.max(0,player.x);
+
+  if(jumpRequest && player.onGround) {
+    player.vy = -12;
+    player.onGround = false;
+  }
+  jumpRequest = false;
+
+  player.vy += 0.55;
+  player.y += player.vy;
+  player.onGround = false;
+
+  // الهبوط فوق المنصات
+  for(const p of platforms) {
+    const horizontal =
+      player.x+player.w > p.x &&
+      player.x < p.x+p.w;
+
+    const crossedTop =
+      oldY+player.h <= p.y &&
+      player.y+player.h >= p.y;
+
+    if(horizontal && crossedTop && player.vy >= 0) {
+      player.y = p.y-player.h;
+      player.vy = 0;
+      player.onGround = true;
+    }
+  }
+
+  // جمع العملات
+  for(const c of coins) {
+    if(!c.taken && hit(player,{x:c.x-12,y:c.y-12,w:24,h:24})) {
+      c.taken = true;
+      score++;
+      updateHud();
+    }
+  }
+
+  // حركة الأعداء
+  for(const e of enemies) {
+    e.x += e.vx;
+    if(e.x < e.min || e.x > e.max) e.vx *= -1;
+
+    if(hit(player,e)) {
+      if(player.vy > 1 && oldY+player.h <= e.y+12) {
+        e.x = -1000;
+        player.vy = -8;
+        score += 2;
+        updateHud();
+      } else {
+        lives--;
+        updateHud();
+        player.x = Math.max(0,player.x-70);
+        player.y = 300;
+        player.vy = 0;
+
+        if(lives <= 0) gameOver = true;
+      }
+    }
+  }
+
+  if(player.y > H+100) {
+    lives--;
+    updateHud();
+    player.x = Math.max(0,player.x-100);
+    player.y = 250;
+    player.vy = 0;
+    if(lives <= 0) gameOver = true;
+  }
+
+  camera = Math.max(0,Math.min(1350,player.x-250));
+
+  if(player.x > 2110) won = true;
+}
+
+function drawMessage(title,subtitle) {
+  ctx.fillStyle = "rgba(10,15,40,0.82)";
+  ctx.fillRect(100,150,700,200);
+  ctx.fillStyle = "#ffd43b";
+  ctx.font = "bold 42px Arial";
+  ctx.textAlign = "center";
+  ctx.fillText(title,W/2,220);
+  ctx.fillStyle = "white";
+  ctx.font = "24px Arial";
+  ctx.fillText(subtitle,W/2,275);
+}
+
+function draw() {
+  drawBackground();
+  drawPlatforms();
+  drawCoins();
+  drawEnemies();
+  drawFinish();
+  drawHero();
+
+  if(gameOver) {
+    drawMessage("انتهت اللعبة 💔","اضغط ابدأ من جديد وحاول تاني");
+  }
+
+  if(won) {
+    drawMessage("مبروك! 🏆","وصلت للنهاية وجمعت "+score+" عملة");
+  }
+}
+
+function loop() {
+  update();
+  draw();
+  requestAnimationFrame(loop);
+}
+
+function hold(id,callbackOn,callbackOff) {
+  const el = document.getElementById(id);
+  el.addEventListener("pointerdown",e=>{
+    e.preventDefault();
+    callbackOn();
+  });
+  ["pointerup","pointerleave","pointercancel"].forEach(event=>{
+    el.addEventListener(event,e=>{
+      e.preventDefault();
+      callbackOff();
+    });
+  });
+}
+
+hold("left",()=>left=true,()=>left=false);
+hold("right",()=>right=true,()=>right=false);
+hold("jump",()=>jumpRequest=true,()=>{});
+
+document.addEventListener("keydown",e=>{
+  if(["ArrowLeft","ArrowRight","ArrowUp","Space"].includes(e.code))
+    e.preventDefault();
+
+  if(e.code==="ArrowLeft" || e.code==="KeyA") left=true;
+  if(e.code==="ArrowRight" || e.code==="KeyD") right=true;
+  if(e.code==="Space" || e.code==="ArrowUp") jumpRequest=true;
+});
+
+document.addEventListener("keyup",e=>{
+  if(e.code==="ArrowLeft" || e.code==="KeyA") left=false;
+  if(e.code==="ArrowRight" || e.code==="KeyD") right=false;
+});
+
+restart();
+loop();
+</script>
+
 </body>
 </html>
-
