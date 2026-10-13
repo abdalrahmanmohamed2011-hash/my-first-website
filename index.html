@@ -1,432 +1,561 @@
 
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مغامرات البطل الصغير</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-* { box-sizing: border-box; }
+    <title>الأم.. نبع الحياة</title>
 
-body {
-  margin: 0;
-  background: #101536;
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
-}
+    <style>
+        * {
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
 
-h1 { color: #ffd43b; }
+        body {
+            margin: 0;
+            font-family: Tahoma, Arial, sans-serif;
+            background: #fffaf5;
+            color: #39332f;
+            line-height: 1.9;
+        }
 
-.hud {
-  font-size: 20px;
-  margin: 10px;
-}
+        :root {
+            --main: #8c4b63;
+            --dark: #542d40;
+            --light: #f8e8ed;
+            --gold: #d8ad67;
+            --white: #ffffff;
+        }
 
-canvas {
-  display: block;
-  width: min(96vw, 900px);
-  margin: auto;
-  border: 4px solid white;
-  border-radius: 12px;
-  background: #87ceeb;
-  touch-action: none;
-}
+        header {
+            background: var(--dark);
+            color: white;
+            padding: 15px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
 
-button {
-  padding: 12px 18px;
-  margin: 7px;
-  border: 0;
-  border-radius: 12px;
-  font-size: 18px;
-  font-weight: bold;
-  background: #ffd43b;
-  cursor: pointer;
-  touch-action: none;
-}
+        .logo {
+            font-size: 23px;
+            font-weight: bold;
+        }
 
-.controls { direction: ltr; }
-</style>
+        nav {
+            display: flex;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: var(--gold);
+        }
+
+        .hero {
+            min-height: 520px;
+            display: flex;
+            align-items: center;
+            padding: 60px 8%;
+            color: white;
+            background:
+                linear-gradient(90deg,
+                rgba(48, 25, 36, .88),
+                rgba(48, 25, 36, .35)),
+                url("https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1800&q=85")
+                center/cover;
+        }
+
+        .hero-content {
+            max-width: 650px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 56px);
+            line-height: 1.4;
+            margin: 10px 0;
+        }
+
+        .hero p {
+            font-size: 19px;
+            color: #fff2e9;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 30px;
+            background: var(--gold);
+            color: #302027;
+            font-size: 16px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: .3s;
+        }
+
+        .button:hover {
+            transform: translateY(-3px);
+            filter: brightness(1.05);
+        }
+
+        section {
+            padding: 65px 8%;
+        }
+
+        .section-title {
+            text-align: center;
+            color: var(--dark);
+            font-size: 32px;
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .section-intro {
+            text-align: center;
+            max-width: 750px;
+            margin: 0 auto 35px;
+            color: #76676c;
+        }
+
+        .about {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 35px;
+            align-items: center;
+        }
+
+        .about img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 22px;
+        }
+
+        .about h2 {
+            color: var(--main);
+            font-size: 28px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+            margin-top: 35px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 6px 25px #542d4010;
+            border-bottom: 4px solid var(--gold);
+            transition: .3s;
+        }
+
+        .card:hover {
+            transform: translateY(-6px);
+        }
+
+        .card .icon {
+            font-size: 38px;
+        }
+
+        .card h3 {
+            color: var(--main);
+        }
+
+        .quote-section {
+            background: var(--light);
+            text-align: center;
+        }
+
+        blockquote {
+            max-width: 850px;
+            margin: 20px auto;
+            color: var(--dark);
+            font-size: clamp(22px, 3vw, 32px);
+            font-weight: bold;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 18px;
+            transition: .3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.025);
+        }
+
+        .message {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+        }
+
+        .message h2 {
+            color: #f1ce91;
+        }
+
+        .message p {
+            max-width: 800px;
+            margin: 15px auto;
+            font-size: 18px;
+        }
+
+        .message .button {
+            background: white;
+            color: var(--dark);
+        }
+
+        #specialMessage {
+            font-size: 22px;
+            color: #ffe3a8;
+            margin-top: 25px;
+        }
+
+        footer {
+            text-align: center;
+            background: #301c27;
+            color: white;
+            padding: 25px 15px;
+        }
+
+        #topButton {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: none;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            background: var(--main);
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px #0002;
+        }
+
+        @media (max-width: 800px) {
+            .about {
+                grid-template-columns: 1fr;
+            }
+
+            .cards {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .gallery {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            header {
+                justify-content: center;
+                text-align: center;
+            }
+
+            nav {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .cards,
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+
+            section {
+                padding: 45px 6%;
+            }
+
+            .hero {
+                min-height: 450px;
+                padding: 45px 6%;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-<h1>⭐ مغامرات البطل الصغير ⭐</h1>
+    <header>
+        <div class="logo">❤️ الأم.. نبع الحياة</div>
 
-<div class="hud">
-  🪙 العملات: <span id="coins">0</span>
-  |
-  ❤️ الأرواح: <span id="lives">3</span>
-</div>
+        <nav>
+            <a href="#home">الرئيسية</a>
+            <a href="#about">عن الأم</a>
+            <a href="#importance">أهميتها</a>
+            <a href="#gallery">معرض الصور</a>
+            <a href="#message">رسالة حب</a>
+        </nav>
+    </header>
 
-<canvas id="game" width="900" height="500"></canvas>
+    <main>
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p>إلى أعظم إنسانة في الوجود</p>
 
-<div class="controls">
-  <button id="left">⬅️</button>
-  <button id="jump">⬆️ نط</button>
-  <button id="right">➡️</button>
-</div>
+                <h1>الأم.. حب لا ينتهي وعطاء بلا حدود</h1>
 
-<button onclick="restart()">🔄 ابدأ من جديد</button>
+                <p>
+                    هي الحضن الدافئ، والقلب الذي يحب دون مقابل،
+                    والنور الذي يضيء لنا الطريق مهما اشتدت ظلمات الحياة.
+                </p>
 
-<p>الكمبيوتر: الأسهم للحركة و Space للنط</p>
+                <a class="button" href="#about">
+                    اكتشف مكانة الأم ❤️
+                </a>
+            </div>
+        </section>
 
-<script>
-const canvas = document.getElementById("game");
-const ctx = canvas.getContext("2d");
+        <section id="about">
+            <div class="about">
+                <div>
+                    <h2>من هي الأم؟</h2>
 
-const W = canvas.width;
-const H = canvas.height;
+                    <p>
+                        الأم ليست مجرد كلمة نرددها، بل هي قصة حب
+                        تبدأ قبل أن نرى نور الحياة، وتستمر معنا
+                        في كل خطوة نخطوها.
+                    </p>
 
-const heroImage = new Image();
-heroImage.src = "player.png";
+                    <p>
+                        هي التي تسهر عندما نمرض، وتفرح عندما ننجح،
+                        وتساندنا عندما نتعثر، وتمنحنا الأمان حتى
+                        عندما تعجز الكلمات عن التعبير عما بداخلها.
+                    </p>
 
-let player, platforms, coins, enemies;
-let score, lives, camera, gameOver, won;
-let left = false, right = false;
-let jumpRequest = false;
-let frame = 0;
+                    <p>
+                        قد لا نستطيع رد كل ما قدمته لنا، لكننا
+                        نستطيع أن نجعلها تشعر بقيمتها من خلال
+                        احترامنا واهتمامنا وصدق محبتنا.
+                    </p>
+                </div>
 
-function restart() {
-  player = {
-    x: 60, y: 300,
-    w: 48, h: 58,
-    vx: 0, vy: 0,
-    onGround: false
-  };
+                <img
+                    src="https://images.unsplash.com/photo-1491013516836-7db643ee125a?auto=format&fit=crop&w=1000&q=85"
+                    alt="لحظة دافئة بين الأم وطفلها"
+                    loading="lazy"
+                >
+            </div>
+        </section>
 
-  platforms = [
-    {x:0, y:430, w:420, h:70},
-    {x:480, y:430, w:300, h:70},
-    {x:840, y:430, w:330, h:70},
-    {x:1230, y:430, w:350, h:70},
-    {x:1650, y:430, w:550, h:70},
-    {x:180, y:340, w:130, h:20},
-    {x:530, y:330, w:130, h:20},
-    {x:900, y:340, w:130, h:20},
-    {x:1120, y:300, w:130, h:20},
-    {x:1420, y:340, w:140, h:20},
-    {x:1740, y:330, w:130, h:20}
-  ];
+        <section id="importance">
+            <h2 class="section-title">لماذا الأم مهمة في حياتنا؟</h2>
 
-  coins = [
-    {x:220,y:300,taken:false},
-    {x:570,y:290,taken:false},
-    {x:710,y:380,taken:false},
-    {x:950,y:300,taken:false},
-    {x:1170,y:260,taken:false},
-    {x:1480,y:300,taken:false},
-    {x:1790,y:290,taken:false},
-    {x:2000,y:380,taken:false}
-  ];
+            <p class="section-intro">
+                للأم دور عظيم في بناء الإنسان وتكوين شخصيته،
+                وتأثيرها يمتد إلى الأسرة والمجتمع كله.
+            </p>
 
-  enemies = [
-    {x:330,y:395,w:35,h:35,vx:1.5,min:280,max:390},
-    {x:990,y:395,w:35,h:35,vx:2,min:870,max:1120},
-    {x:1740,y:395,w:35,h:35,vx:1.7,min:1680,max:2100}
-  ];
+            <div class="cards">
+                <article class="card">
+                    <div class="icon">🤍</div>
+                    <h3>الحب غير المشروط</h3>
+                    <p>
+                        تمنحنا الأم شعورًا بالقبول والأمان،
+                        وتذكرنا بأننا نستحق الحب حتى في أصعب أيامنا.
+                    </p>
+                </article>
 
-  score = 0;
-  lives = 3;
-  camera = 0;
-  gameOver = false;
-  won = false;
-  frame = 0;
-  left = false;
-  right = false;
-  jumpRequest = false;
-  updateHud();
-}
+                <article class="card">
+                    <div class="icon">🌱</div>
+                    <h3>التربية وبناء الشخصية</h3>
+                    <p>
+                        تساعدنا على تعلم الاحترام والصبر
+                        وتحمل المسؤولية والتمييز بين الصواب والخطأ.
+                    </p>
+                </article>
 
-function updateHud() {
-  document.getElementById("coins").textContent = score;
-  document.getElementById("lives").textContent = lives;
-}
+                <article class="card">
+                    <div class="icon">🛡️</div>
+                    <h3>الأمان والسند</h3>
+                    <p>
+                        تقف بجانبنا في الأوقات الصعبة،
+                        وتمنحنا التشجيع لنبدأ من جديد.
+                    </p>
+                </article>
 
-function drawBackground() {
-  const sky = ctx.createLinearGradient(0,0,0,H);
-  sky.addColorStop(0,"#55c9ff");
-  sky.addColorStop(1,"#d5f6ff");
-  ctx.fillStyle = sky;
-  ctx.fillRect(0,0,W,H);
+                <article class="card">
+                    <div class="icon">📚</div>
+                    <h3>التشجيع على النجاح</h3>
+                    <p>
+                        تشجعنا على التعلم والاجتهاد،
+                        وتساعدنا على اكتشاف قدراتنا وتحقيق أهدافنا.
+                    </p>
+                </article>
 
-  // سحب
-  ctx.fillStyle = "rgba(255,255,255,0.9)";
-  for (let i=0; i<7; i++) {
-    let x = ((i*190 - camera*0.25) % 1100 + 1100) % 1100;
-    let y = 70 + (i%3)*45;
-    ctx.beginPath();
-    ctx.arc(x,y,23,0,Math.PI*2);
-    ctx.arc(x+25,y-12,30,0,Math.PI*2);
-    ctx.arc(x+55,y,22,0,Math.PI*2);
-    ctx.fill();
-  }
+                <article class="card">
+                    <div class="icon">🏡</div>
+                    <h3>دفء الأسرة</h3>
+                    <p>
+                        تسهم في بناء الروابط الأسرية،
+                        وتساعد على نشر المودة والتعاون بين أفراد الأسرة.
+                    </p>
+                </article>
 
-  // تلال في الخلفية
-  ctx.fillStyle = "#75d66c";
-  for (let i=0;i<8;i++) {
-    const x = i*180 - (camera*0.45 % 180);
-    ctx.beginPath();
-    ctx.ellipse(x+80,445,100,65,0,Math.PI,Math.PI*2);
-    ctx.fill();
-  }
-}
+                <article class="card">
+                    <div class="icon">🌷</div>
+                    <h3>الصبر والتضحية</h3>
+                    <p>
+                        تبذل الكثير من وقتها وجهدها من أجل أبنائها،
+                        وتعلمهم معنى الرحمة والاهتمام بالآخرين.
+                    </p>
+                </article>
+            </div>
+        </section>
 
-function drawPlatforms() {
-  for (const p of platforms) {
-    const x = p.x - camera;
-    if (x > W || x+p.w < 0) continue;
+        <section class="quote-section">
+            <h2 class="section-title">كلمات عن الأم</h2>
 
-    ctx.fillStyle = "#a65e2e";
-    ctx.fillRect(x,p.y,p.w,p.h);
+            <blockquote>
+                "الأم هي الشخص الذي يجعل من أبسط لحظات الحياة
+                ذكريات لا تُنسى، ومن أصعب الأيام أيامًا يمكن تجاوزها."
+            </blockquote>
 
-    ctx.fillStyle = "#40c84a";
-    ctx.fillRect(x,p.y,p.w,12);
+            <p class="section-intro">
+                أجمل ما نقدمه لها ليس الكلمات وحدها،
+                بل أن نترجم حبنا إلى أفعال كل يوم.
+            </p>
+        </section>
 
-    ctx.fillStyle = "#d48a4a";
-    for(let bx=x+12; bx<x+p.w; bx+=35) {
-      ctx.fillRect(bx,p.y+25,20,5);
-    }
-  }
-}
+        <section id="gallery">
+            <h2 class="section-title">صور تحكي معنى الحب ❤️</h2>
 
-function drawCoins() {
-  for(const c of coins) {
-    if(c.taken) continue;
+            <p class="section-intro">
+                تفاصيل صغيرة تصنع ذكريات كبيرة،
+                ولحظات عائلية تبقى في القلب طويلًا.
+            </p>
 
-    const x = c.x-camera;
-    if(x < -30 || x > W+30) continue;
+            <div class="gallery">
+                <img
+                    src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85"
+                    alt="لحظة عائلية مليئة بالمحبة"
+                    loading="lazy"
+                >
 
-    ctx.fillStyle = "#ffb703";
-    ctx.beginPath();
-    ctx.arc(x,c.y,13,0,Math.PI*2);
-    ctx.fill();
+                <img
+                    src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=900&q=85"
+                    alt="أسرة تقضي وقتًا معًا"
+                    loading="lazy"
+                >
 
-    ctx.strokeStyle = "#fff0a6";
-    ctx.lineWidth = 4;
-    ctx.stroke();
+                <img
+                    src="https://images.unsplash.com/photo-1491013516836-7db643ee125a?auto=format&fit=crop&w=900&q=85"
+                    alt="أم وطفلها في لحظة حنان"
+                    loading="lazy"
+                >
+            </div>
+        </section>
 
-    ctx.fillStyle = "#fff7c2";
-    ctx.fillRect(x-2,c.y-7,4,14);
-  }
-}
+        <section>
+            <h2 class="section-title">كيف نُسعد أمهاتنا؟</h2>
 
-function drawHero() {
-  const x = player.x-camera;
+            <p class="section-intro">
+                لا يحتاج إسعاد الأم إلى هدية باهظة الثمن،
+                فأحيانًا تكون أبسط التصرفات هي الأغلى على قلبها.
+            </p>
 
-  // ظل البطل
-  ctx.fillStyle = "rgba(0,0,0,0.15)";
-  ctx.beginPath();
-  ctx.ellipse(x+player.w/2,player.y+player.h+3,22,6,0,0,Math.PI*2);
-  ctx.fill();
+            <div class="cards">
+                <article class="card">
+                    <div class="icon">🗣️</div>
+                    <h3>الكلمة الطيبة</h3>
+                    <p>تحدث معها بلطف، واشكرها على ما تفعله من أجلك.</p>
+                </article>
 
-  if(heroImage.complete && heroImage.naturalWidth > 0) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.roundRect(x,player.y,player.w,player.h,12);
-    ctx.clip();
-    ctx.drawImage(heroImage,x,player.y,player.w,player.h);
-    ctx.restore();
+                <article class="card">
+                    <div class="icon">🤝</div>
+                    <h3>المساعدة</h3>
+                    <p>ساعدها في أعمال المنزل دون انتظار أن تطلب منك.</p>
+                </article>
 
-    ctx.strokeStyle = "#fff";
-    ctx.lineWidth = 3;
-    ctx.strokeRect(x,player.y,player.w,player.h);
-  } else {
-    ctx.fillStyle = "#ffccaa";
-    ctx.fillRect(x,player.y,player.w,player.h);
-    ctx.fillStyle = "#222";
-    ctx.fillText("🙂",x+5,player.y+35);
-  }
-}
+                <article class="card">
+                    <div class="icon">⏰</div>
+                    <h3>الوقت والاهتمام</h3>
+                    <p>اجلس معها، واستمع إليها، وشاركها تفاصيل يومك.</p>
+                </article>
+            </div>
+        </section>
 
-function drawEnemies() {
-  for(const e of enemies) {
-    const x = e.x-camera;
-    if(x < -50 || x > W+50) continue;
+        <section class="message" id="message">
+            <h2 class="section-title">رسالة حب إلى أمي</h2>
 
-    ctx.font = "34px Arial";
-    ctx.textAlign = "center";
-    ctx.fillText("👾",x+e.w/2,e.y+e.h);
-  }
-}
+            <p>
+                أمي الحبيبة، شكرًا لأنك كنتِ دائمًا مصدرًا
+                للحب والحنان، ولأنك تمنحينني الأمل عندما
+                أشعر بالتعب، وتفرحين لفرحي وكأن النجاح نجاحك.
+            </p>
 
-function drawFinish() {
-  ctx.fillStyle = "#e63946";
-  ctx.fillRect(2110-camera,310,10,120);
-  ctx.fillStyle = "#ffca3a";
-  ctx.beginPath();
-  ctx.moveTo(2120-camera,310);
-  ctx.lineTo(2180-camera,330);
-  ctx.lineTo(2120-camera,350);
-  ctx.fill();
-}
+            <p>
+                قد لا تكفي الكلمات للتعبير عن مكانتك في قلبي،
+                لكنني سأحاول دائمًا أن أُظهر لكِ حبي واحترامي،
+                وأن أجعلك تشعرين بأن كل ما قدمتِه له قيمة كبيرة.
+            </p>
 
-function hit(a,b) {
-  return a.x < b.x+b.w &&
-         a.x+a.w > b.x &&
-         a.y < b.y+b.h &&
-         a.y+a.h > b.y;
-}
+            <button class="button" onclick="showLove()">
+                اضغط لرسالة خاصة 💌
+            </button>
 
-function update() {
-  if(gameOver || won) return;
+            <p id="specialMessage" aria-live="polite"></p>
+        </section>
+    </main>
 
-  frame++;
+    <footer>
+        <p>صُنع بكل حب ❤️ تقديرًا لكل أم</p>
+        <p>الأم.. نبع الحياة الذي لا ينضب</p>
+        <p>© 2026 - مشروع تعليمي لتعلم تصميم مواقع الويب</p>
+    </footer>
 
-  const oldY = player.y;
+    <button id="topButton" onclick="goToTop()" aria-label="العودة للأعلى">
+        ↑
+    </button>
 
-  player.vx = 0;
-  if(left) player.vx = -4;
-  if(right) player.vx = 4;
+    <script>
+        function showLove() {
+            document.getElementById("specialMessage").textContent =
+                "ربنا يخليكي ليا يا أمي، ويديم وجودك نعمة في حياتي ❤️";
+        }
 
-  player.x += player.vx;
-  player.x = Math.max(0,player.x);
+        const topButton = document.getElementById("topButton");
 
-  if(jumpRequest && player.onGround) {
-    player.vy = -12;
-    player.onGround = false;
-  }
-  jumpRequest = false;
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 300) {
+                topButton.style.display = "block";
+            } else {
+                topButton.style.display = "none";
+            }
+        });
 
-  player.vy += 0.55;
-  player.y += player.vy;
-  player.onGround = false;
-
-  // الهبوط فوق المنصات
-  for(const p of platforms) {
-    const horizontal =
-      player.x+player.w > p.x &&
-      player.x < p.x+p.w;
-
-    const crossedTop =
-      oldY+player.h <= p.y &&
-      player.y+player.h >= p.y;
-
-    if(horizontal && crossedTop && player.vy >= 0) {
-      player.y = p.y-player.h;
-      player.vy = 0;
-      player.onGround = true;
-    }
-  }
-
-  // جمع العملات
-  for(const c of coins) {
-    if(!c.taken && hit(player,{x:c.x-12,y:c.y-12,w:24,h:24})) {
-      c.taken = true;
-      score++;
-      updateHud();
-    }
-  }
-
-  // حركة الأعداء
-  for(const e of enemies) {
-    e.x += e.vx;
-    if(e.x < e.min || e.x > e.max) e.vx *= -1;
-
-    if(hit(player,e)) {
-      if(player.vy > 1 && oldY+player.h <= e.y+12) {
-        e.x = -1000;
-        player.vy = -8;
-        score += 2;
-        updateHud();
-      } else {
-        lives--;
-        updateHud();
-        player.x = Math.max(0,player.x-70);
-        player.y = 300;
-        player.vy = 0;
-
-        if(lives <= 0) gameOver = true;
-      }
-    }
-  }
-
-  if(player.y > H+100) {
-    lives--;
-    updateHud();
-    player.x = Math.max(0,player.x-100);
-    player.y = 250;
-    player.vy = 0;
-    if(lives <= 0) gameOver = true;
-  }
-
-  camera = Math.max(0,Math.min(1350,player.x-250));
-
-  if(player.x > 2110) won = true;
-}
-
-function drawMessage(title,subtitle) {
-  ctx.fillStyle = "rgba(10,15,40,0.82)";
-  ctx.fillRect(100,150,700,200);
-  ctx.fillStyle = "#ffd43b";
-  ctx.font = "bold 42px Arial";
-  ctx.textAlign = "center";
-  ctx.fillText(title,W/2,220);
-  ctx.fillStyle = "white";
-  ctx.font = "24px Arial";
-  ctx.fillText(subtitle,W/2,275);
-}
-
-function draw() {
-  drawBackground();
-  drawPlatforms();
-  drawCoins();
-  drawEnemies();
-  drawFinish();
-  drawHero();
-
-  if(gameOver) {
-    drawMessage("انتهت اللعبة 💔","اضغط ابدأ من جديد وحاول تاني");
-  }
-
-  if(won) {
-    drawMessage("مبروك! 🏆","وصلت للنهاية وجمعت "+score+" عملة");
-  }
-}
-
-function loop() {
-  update();
-  draw();
-  requestAnimationFrame(loop);
-}
-
-function hold(id,callbackOn,callbackOff) {
-  const el = document.getElementById(id);
-  el.addEventListener("pointerdown",e=>{
-    e.preventDefault();
-    callbackOn();
-  });
-  ["pointerup","pointerleave","pointercancel"].forEach(event=>{
-    el.addEventListener(event,e=>{
-      e.preventDefault();
-      callbackOff();
-    });
-  });
-}
-
-hold("left",()=>left=true,()=>left=false);
-hold("right",()=>right=true,()=>right=false);
-hold("jump",()=>jumpRequest=true,()=>{});
-
-document.addEventListener("keydown",e=>{
-  if(["ArrowLeft","ArrowRight","ArrowUp","Space"].includes(e.code))
-    e.preventDefault();
-
-  if(e.code==="ArrowLeft" || e.code==="KeyA") left=true;
-  if(e.code==="ArrowRight" || e.code==="KeyD") right=true;
-  if(e.code==="Space" || e.code==="ArrowUp") jumpRequest=true;
-});
-
-document.addEventListener("keyup",e=>{
-  if(e.code==="ArrowLeft" || e.code==="KeyA") left=false;
-  if(e.code==="ArrowRight" || e.code==="KeyD") right=false;
-});
-
-restart();
-loop();
-</script>
+        function goToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+        }
+    </script>
 
 </body>
 </html>
+
+
