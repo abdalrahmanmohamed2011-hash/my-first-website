@@ -2,560 +2,393 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA AI - الذكاء الاصطناعي</title>
 
-    <title>الأم.. نبع الحياة</title>
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-            scroll-behavior: smooth;
-        }
+body {
+    font-family: Arial, Tahoma, sans-serif;
+    background: #080d1b;
+    color: white;
+    min-height: 100vh;
+}
 
-        body {
-            margin: 0;
-            font-family: Tahoma, Arial, sans-serif;
-            background: #fffaf5;
-            color: #39332f;
-            line-height: 1.9;
-        }
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px 8%;
+    border-bottom: 1px solid #26304b;
+    background: #0c1325;
+}
 
-        :root {
-            --main: #8c4b63;
-            --dark: #542d40;
-            --light: #f8e8ed;
-            --gold: #d8ad67;
-            --white: #ffffff;
-        }
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #8b7bff;
+}
 
-        header {
-            background: var(--dark);
-            color: white;
-            padding: 15px 7%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
+.logo span {
+    color: #21e6c1;
+}
 
-        .logo {
-            font-size: 23px;
-            font-weight: bold;
-        }
+header a {
+    color: white;
+    text-decoration: none;
+    margin-right: 20px;
+}
 
-        nav {
-            display: flex;
-            gap: 18px;
-            flex-wrap: wrap;
-        }
+.hero {
+    text-align: center;
+    padding: 65px 20px 35px;
+}
 
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 14px;
-        }
+.badge {
+    display: inline-block;
+    padding: 9px 17px;
+    border: 1px solid #5146a8;
+    background: #17163a;
+    border-radius: 30px;
+    color: #c1b8ff;
+    margin-bottom: 22px;
+}
 
-        nav a:hover {
-            color: var(--gold);
-        }
+.hero h1 {
+    font-size: clamp(35px, 6vw, 65px);
+    margin-bottom: 20px;
+    line-height: 1.3;
+}
 
-        .hero {
-            min-height: 520px;
-            display: flex;
-            align-items: center;
-            padding: 60px 8%;
-            color: white;
-            background:
-                linear-gradient(90deg,
-                rgba(48, 25, 36, .88),
-                rgba(48, 25, 36, .35)),
-                url("https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=1800&q=85")
-                center/cover;
-        }
+.hero h1 span {
+    background: linear-gradient(90deg, #8b7bff, #21e6c1);
+    color: transparent;
+    background-clip: text;
+}
 
-        .hero-content {
-            max-width: 650px;
-        }
+.hero p {
+    color: #aab4ce;
+    line-height: 2;
+    max-width: 650px;
+    margin: auto;
+}
 
-        .hero h1 {
-            font-size: clamp(32px, 5vw, 56px);
-            line-height: 1.4;
-            margin: 10px 0;
-        }
+.container {
+    max-width: 850px;
+    margin: 25px auto 60px;
+    padding: 0 18px;
+}
 
-        .hero p {
-            font-size: 19px;
-            color: #fff2e9;
-        }
+.chat {
+    background: #10192c;
+    border: 1px solid #293653;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 50px #0005;
+}
 
-        .button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin-top: 15px;
-            border: none;
-            border-radius: 30px;
-            background: var(--gold);
-            color: #302027;
-            font-size: 16px;
-            text-decoration: none;
-            cursor: pointer;
-            transition: .3s;
-        }
+.chat-header {
+    padding: 18px;
+    border-bottom: 1px solid #293653;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
 
-        .button:hover {
-            transform: translateY(-3px);
-            filter: brightness(1.05);
-        }
+.avatar {
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, #7664ff, #17cbb3);
+    font-size: 23px;
+}
 
-        section {
-            padding: 65px 8%;
-        }
+.chat-header p {
+    color: #9ba9c5;
+    margin-top: 5px;
+    font-size: 13px;
+}
 
-        .section-title {
-            text-align: center;
-            color: var(--dark);
-            font-size: 32px;
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
+.messages {
+    height: 350px;
+    overflow-y: auto;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 
-        .section-intro {
-            text-align: center;
-            max-width: 750px;
-            margin: 0 auto 35px;
-            color: #76676c;
-        }
+.message {
+    padding: 14px 16px;
+    border-radius: 15px;
+    max-width: 90%;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
 
-        .about {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 35px;
-            align-items: center;
-        }
+.bot {
+    background: #1a2740;
+    align-self: flex-start;
+}
 
-        .about img {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 22px;
-        }
+.user {
+    background: #5146a8;
+    align-self: flex-end;
+}
 
-        .about h2 {
-            color: var(--main);
-            font-size: 28px;
-        }
+.input-area {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    border-top: 1px solid #293653;
+}
 
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 22px;
-            margin-top: 35px;
-        }
+input {
+    flex: 1;
+    min-width: 0;
+    background: #080f20;
+    border: 1px solid #34415e;
+    color: white;
+    border-radius: 12px;
+    padding: 15px;
+    font-size: 15px;
+    outline: none;
+}
 
-        .card {
-            background: white;
-            padding: 25px;
-            border-radius: 18px;
-            box-shadow: 0 6px 25px #542d4010;
-            border-bottom: 4px solid var(--gold);
-            transition: .3s;
-        }
+input:focus {
+    border-color: #8b7bff;
+}
 
-        .card:hover {
-            transform: translateY(-6px);
-        }
+button {
+    border: none;
+    border-radius: 12px;
+    padding: 0 22px;
+    background: linear-gradient(135deg, #7867ff, #5146a8);
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .card .icon {
-            font-size: 38px;
-        }
+button:hover {
+    opacity: 0.85;
+}
 
-        .card h3 {
-            color: var(--main);
-        }
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+}
 
-        .quote-section {
-            background: var(--light);
-            text-align: center;
-        }
+.feature {
+    background: #10192c;
+    border: 1px solid #293653;
+    border-radius: 16px;
+    padding: 22px;
+}
 
-        blockquote {
-            max-width: 850px;
-            margin: 20px auto;
-            color: var(--dark);
-            font-size: clamp(22px, 3vw, 32px);
-            font-weight: bold;
-        }
+.feature .icon {
+    font-size: 30px;
+    margin-bottom: 13px;
+}
 
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 18px;
-        }
+.feature h3 {
+    margin-bottom: 10px;
+}
 
-        .gallery img {
-            width: 100%;
-            height: 260px;
-            object-fit: cover;
-            border-radius: 18px;
-            transition: .3s;
-        }
+.feature p {
+    color: #aab4ce;
+    line-height: 1.8;
+    font-size: 14px;
+}
 
-        .gallery img:hover {
-            transform: scale(1.025);
-        }
+footer {
+    text-align: center;
+    padding: 25px;
+    border-top: 1px solid #26304b;
+    color: #8492ae;
+    font-size: 13px;
+}
 
-        .message {
-            background: var(--dark);
-            color: white;
-            text-align: center;
-        }
+@media(max-width: 500px) {
+    header {
+        padding: 18px;
+    }
 
-        .message h2 {
-            color: #f1ce91;
-        }
+    header a {
+        margin-right: 8px;
+        font-size: 13px;
+    }
 
-        .message p {
-            max-width: 800px;
-            margin: 15px auto;
-            font-size: 18px;
-        }
+    .messages {
+        height: 330px;
+    }
 
-        .message .button {
-            background: white;
-            color: var(--dark);
-        }
+    .input-area {
+        padding: 10px;
+    }
 
-        #specialMessage {
-            font-size: 22px;
-            color: #ffe3a8;
-            margin-top: 25px;
-        }
-
-        footer {
-            text-align: center;
-            background: #301c27;
-            color: white;
-            padding: 25px 15px;
-        }
-
-        #topButton {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            display: none;
-            border: none;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            background: var(--main);
-            color: white;
-            font-size: 22px;
-            cursor: pointer;
-            box-shadow: 0 4px 15px #0002;
-        }
-
-        @media (max-width: 800px) {
-            .about {
-                grid-template-columns: 1fr;
-            }
-
-            .cards {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .gallery {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            header {
-                justify-content: center;
-                text-align: center;
-            }
-
-            nav {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 520px) {
-            .cards,
-            .gallery {
-                grid-template-columns: 1fr;
-            }
-
-            section {
-                padding: 45px 6%;
-            }
-
-            .hero {
-                min-height: 450px;
-                padding: 45px 6%;
-            }
-        }
-    </style>
+    button {
+        padding: 0 15px;
+    }
+}
+</style>
 </head>
 
 <body>
 
-    <header>
-        <div class="logo">❤️ الأم.. نبع الحياة</div>
+<header>
+    <div class="logo">NOVA <span>AI</span></div>
+    <nav>
+        <a href="#chat">المساعد</a>
+        <a href="#features">المميزات</a>
+    </nav>
+</header>
 
-        <nav>
-            <a href="#home">الرئيسية</a>
-            <a href="#about">عن الأم</a>
-            <a href="#importance">أهميتها</a>
-            <a href="#gallery">معرض الصور</a>
-            <a href="#message">رسالة حب</a>
-        </nav>
-    </header>
+<section class="hero">
+    <div class="badge">✦ عالم الذكاء الاصطناعي</div>
 
-    <main>
-        <section class="hero" id="home">
-            <div class="hero-content">
-                <p>إلى أعظم إنسانة في الوجود</p>
+    <h1>
+        اكتشف قوة <span>الذكاء الاصطناعي</span>
+    </h1>
 
-                <h1>الأم.. حب لا ينتهي وعطاء بلا حدود</h1>
+    <p>
+        مرحباً بك في NOVA AI، واجهة عصرية لعالم الذكاء الاصطناعي.
+        استكشف التكنولوجيا، وتعلم البرمجة، وابدأ رحلتك نحو المستقبل.
+    </p>
+</section>
 
-                <p>
-                    هي الحضن الدافئ، والقلب الذي يحب دون مقابل،
-                    والنور الذي يضيء لنا الطريق مهما اشتدت ظلمات الحياة.
-                </p>
+<main class="container">
 
-                <a class="button" href="#about">
-                    اكتشف مكانة الأم ❤️
-                </a>
+    <section class="chat" id="chat">
+        <div class="chat-header">
+            <div class="avatar">✦</div>
+            <div>
+                <h3>NOVA Assistant</h3>
+                <p>مساعدك الرقمي التجريبي</p>
             </div>
-        </section>
+        </div>
 
-        <section id="about">
-            <div class="about">
-                <div>
-                    <h2>من هي الأم؟</h2>
-
-                    <p>
-                        الأم ليست مجرد كلمة نرددها، بل هي قصة حب
-                        تبدأ قبل أن نرى نور الحياة، وتستمر معنا
-                        في كل خطوة نخطوها.
-                    </p>
-
-                    <p>
-                        هي التي تسهر عندما نمرض، وتفرح عندما ننجح،
-                        وتساندنا عندما نتعثر، وتمنحنا الأمان حتى
-                        عندما تعجز الكلمات عن التعبير عما بداخلها.
-                    </p>
-
-                    <p>
-                        قد لا نستطيع رد كل ما قدمته لنا، لكننا
-                        نستطيع أن نجعلها تشعر بقيمتها من خلال
-                        احترامنا واهتمامنا وصدق محبتنا.
-                    </p>
-                </div>
-
-                <img
-                    src="https://images.unsplash.com/photo-1491013516836-7db643ee125a?auto=format&fit=crop&w=1000&q=85"
-                    alt="لحظة دافئة بين الأم وطفلها"
-                    loading="lazy"
-                >
+        <div class="messages" id="messages">
+            <div class="message bot">
+                أهلاً بيك! 👋
+                أنا NOVA AI، مساعد تجريبي داخل الموقع.
+                اسألني عن الذكاء الاصطناعي أو البرمجة!
             </div>
-        </section>
+        </div>
 
-        <section id="importance">
-            <h2 class="section-title">لماذا الأم مهمة في حياتنا؟</h2>
+        <form class="input-area" id="chatForm">
+            <input
+                type="text"
+                id="userInput"
+                placeholder="اكتب رسالتك هنا..."
+                autocomplete="off"
+                required
+            >
+            <button type="submit">إرسال ➤</button>
+        </form>
+    </section>
 
-            <p class="section-intro">
-                للأم دور عظيم في بناء الإنسان وتكوين شخصيته،
-                وتأثيرها يمتد إلى الأسرة والمجتمع كله.
-            </p>
-
-            <div class="cards">
-                <article class="card">
-                    <div class="icon">🤍</div>
-                    <h3>الحب غير المشروط</h3>
-                    <p>
-                        تمنحنا الأم شعورًا بالقبول والأمان،
-                        وتذكرنا بأننا نستحق الحب حتى في أصعب أيامنا.
-                    </p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">🌱</div>
-                    <h3>التربية وبناء الشخصية</h3>
-                    <p>
-                        تساعدنا على تعلم الاحترام والصبر
-                        وتحمل المسؤولية والتمييز بين الصواب والخطأ.
-                    </p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">🛡️</div>
-                    <h3>الأمان والسند</h3>
-                    <p>
-                        تقف بجانبنا في الأوقات الصعبة،
-                        وتمنحنا التشجيع لنبدأ من جديد.
-                    </p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">📚</div>
-                    <h3>التشجيع على النجاح</h3>
-                    <p>
-                        تشجعنا على التعلم والاجتهاد،
-                        وتساعدنا على اكتشاف قدراتنا وتحقيق أهدافنا.
-                    </p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">🏡</div>
-                    <h3>دفء الأسرة</h3>
-                    <p>
-                        تسهم في بناء الروابط الأسرية،
-                        وتساعد على نشر المودة والتعاون بين أفراد الأسرة.
-                    </p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">🌷</div>
-                    <h3>الصبر والتضحية</h3>
-                    <p>
-                        تبذل الكثير من وقتها وجهدها من أجل أبنائها،
-                        وتعلمهم معنى الرحمة والاهتمام بالآخرين.
-                    </p>
-                </article>
-            </div>
-        </section>
-
-        <section class="quote-section">
-            <h2 class="section-title">كلمات عن الأم</h2>
-
-            <blockquote>
-                "الأم هي الشخص الذي يجعل من أبسط لحظات الحياة
-                ذكريات لا تُنسى، ومن أصعب الأيام أيامًا يمكن تجاوزها."
-            </blockquote>
-
-            <p class="section-intro">
-                أجمل ما نقدمه لها ليس الكلمات وحدها،
-                بل أن نترجم حبنا إلى أفعال كل يوم.
-            </p>
-        </section>
-
-        <section id="gallery">
-            <h2 class="section-title">صور تحكي معنى الحب ❤️</h2>
-
-            <p class="section-intro">
-                تفاصيل صغيرة تصنع ذكريات كبيرة،
-                ولحظات عائلية تبقى في القلب طويلًا.
-            </p>
-
-            <div class="gallery">
-                <img
-                    src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=900&q=85"
-                    alt="لحظة عائلية مليئة بالمحبة"
-                    loading="lazy"
-                >
-
-                <img
-                    src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?auto=format&fit=crop&w=900&q=85"
-                    alt="أسرة تقضي وقتًا معًا"
-                    loading="lazy"
-                >
-
-                <img
-                    src="https://images.unsplash.com/photo-1491013516836-7db643ee125a?auto=format&fit=crop&w=900&q=85"
-                    alt="أم وطفلها في لحظة حنان"
-                    loading="lazy"
-                >
-            </div>
-        </section>
-
-        <section>
-            <h2 class="section-title">كيف نُسعد أمهاتنا؟</h2>
-
-            <p class="section-intro">
-                لا يحتاج إسعاد الأم إلى هدية باهظة الثمن،
-                فأحيانًا تكون أبسط التصرفات هي الأغلى على قلبها.
-            </p>
-
-            <div class="cards">
-                <article class="card">
-                    <div class="icon">🗣️</div>
-                    <h3>الكلمة الطيبة</h3>
-                    <p>تحدث معها بلطف، واشكرها على ما تفعله من أجلك.</p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">🤝</div>
-                    <h3>المساعدة</h3>
-                    <p>ساعدها في أعمال المنزل دون انتظار أن تطلب منك.</p>
-                </article>
-
-                <article class="card">
-                    <div class="icon">⏰</div>
-                    <h3>الوقت والاهتمام</h3>
-                    <p>اجلس معها، واستمع إليها، وشاركها تفاصيل يومك.</p>
-                </article>
-            </div>
-        </section>
-
-        <section class="message" id="message">
-            <h2 class="section-title">رسالة حب إلى أمي</h2>
-
+    <section class="features" id="features">
+        <div class="feature">
+            <div class="icon">🧠</div>
+            <h3>الذكاء الاصطناعي</h3>
             <p>
-                أمي الحبيبة، شكرًا لأنك كنتِ دائمًا مصدرًا
-                للحب والحنان، ولأنك تمنحينني الأمل عندما
-                أشعر بالتعب، وتفرحين لفرحي وكأن النجاح نجاحك.
+                تعرف على الأنظمة الذكية وكيف تساعد البشر
+                في حل المشكلات وتحليل المعلومات.
             </p>
+        </div>
 
+        <div class="feature">
+            <div class="icon">💻</div>
+            <h3>البرمجة</h3>
             <p>
-                قد لا تكفي الكلمات للتعبير عن مكانتك في قلبي،
-                لكنني سأحاول دائمًا أن أُظهر لكِ حبي واحترامي،
-                وأن أجعلك تشعرين بأن كل ما قدمتِه له قيمة كبيرة.
+                ابدأ رحلتك في عالم الأكواد وتطوير المواقع
+                والتطبيقات والألعاب.
             </p>
+        </div>
 
-            <button class="button" onclick="showLove()">
-                اضغط لرسالة خاصة 💌
-            </button>
+        <div class="feature">
+            <div class="icon">🚀</div>
+            <h3>مستقبل التكنولوجيا</h3>
+            <p>
+                اكتشف كيف تتطور التكنولوجيا وتفتح
+                مجالات جديدة للتعلم والإبداع.
+            </p>
+        </div>
+    </section>
 
-            <p id="specialMessage" aria-live="polite"></p>
-        </section>
-    </main>
+</main>
 
-    <footer>
-        <p>صُنع بكل حب ❤️ تقديرًا لكل أم</p>
-        <p>الأم.. نبع الحياة الذي لا ينضب</p>
-        <p>© 2026 - مشروع تعليمي لتعلم تصميم مواقع الويب</p>
-    </footer>
+<footer>
+    NOVA AI © 2026 — مشروع تعليمي لتجربة واجهات الذكاء الاصطناعي
+</footer>
 
-    <button id="topButton" onclick="goToTop()" aria-label="العودة للأعلى">
-        ↑
-    </button>
+<script>
+const form = document.getElementById("chatForm");
+const input = document.getElementById("userInput");
+const messages = document.getElementById("messages");
 
-    <script>
-        function showLove() {
-            document.getElementById("specialMessage").textContent =
-                "ربنا يخليكي ليا يا أمي، ويديم وجودك نعمة في حياتي ❤️";
-        }
+function addMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = "message " + type;
+    div.textContent = text;
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+}
 
-        const topButton = document.getElementById("topButton");
+function getReply(text) {
+    const q = text.toLowerCase();
 
-        window.addEventListener("scroll", function () {
-            if (window.scrollY > 300) {
-                topButton.style.display = "block";
-            } else {
-                topButton.style.display = "none";
-            }
-        });
+    if (q.includes("مرحبا") || q.includes("السلام") || q.includes("اهلا")) {
+        return "أهلاً بيك! 👋 نورت NOVA AI. تحب تعرف إيه عن الذكاء الاصطناعي؟";
+    }
 
-        function goToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-        }
-    </script>
+    if (q.includes("اسمك")) {
+        return "أنا NOVA AI، مساعد تجريبي معمول باستخدام HTML وCSS وJavaScript.";
+    }
+
+    if (q.includes("ذكاء اصطناعي") || q.includes("الذكاء الاصطناعي")) {
+        return "الذكاء الاصطناعي هو مجال في علوم الكمبيوتر بيهدف لبناء أنظمة تنفذ مهام زي فهم اللغة وتحليل الصور والمساعدة في حل المشكلات. أنا هنا بعرض تجربة بسيطة، ولسه مش متصل بموديل ذكاء اصطناعي حقيقي.";
+    }
+
+    if (q.includes("html") || q.includes("برمجة") || q.includes("كود")) {
+        return "البرمجة هي كتابة تعليمات للكمبيوتر. HTML بتبني هيكل الصفحة، وCSS بتنسق شكلها، وJavaScript بتضيف التفاعل. تقدر تبدأ بتجربة أكواد صغيرة وتطورها تدريجياً.";
+    }
+
+    if (q.includes("باي") || q.includes("سلام")) {
+        return "مع السلامة! 👋 مستنيك ترجع تاني لـ NOVA AI.";
+    }
+
+    return "وصلتني رسالتك: " + text +
+        "\n\nأنا حالياً نسخة تجريبية بردود محددة، ومش بقدر أفهم كل الأسئلة زي ChatGPT. عشان أرد على أسئلة متنوعة بذكاء اصطناعي حقيقي، لازم نتصل بموديل AI من خلال API آمن.";
+}
+
+form.addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    addMessage(text, "user");
+    input.value = "";
+
+    const reply = getReply(text);
+    setTimeout(function() {
+        addMessage(reply, "bot");
+    }, 350);
+});
+</script>
 
 </body>
 </html>
-
-
